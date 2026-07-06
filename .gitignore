@@ -1,13 +1,49 @@
-venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
 
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Environment Variables
 .env
 
-data/*.db
+# Database
+*.db
+*.sqlite3
 
+# Flask
+instance/
+.flaskenv
+
+# IDE
 .vscode/
+.idea/
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# PDF Reports
 reports/
 
-.DS_Store
+# Temporary Files
+*.tmp
+*.bak

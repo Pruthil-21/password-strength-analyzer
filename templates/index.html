@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Password Strength Analyzer{% endblock %}
+
+{% block content %}
+
+<header class="navbar">
+    <div class="container">
+
+        <a href="/" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Password Strength Analyzer</span>
+        </a>
+
+        <div class="nav-actions">
+            <button id="history-btn" class="nav-btn">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                History
+            </button>
+
+            <a href="https://github.com/Pruthil-21/password-strength-analyzer"
+               target="_blank"
+               class="nav-btn">
+                <i class="fa-brands fa-github"></i>
+                GitHub
+            </a>
+        </div>
+
+    </div>
+</header>
+
+<main class="container dashboard">
+
+    <!-- Analyzer -->
+    <section class="card">
+
+        <h2>Password Analysis</h2>
+
+        <label for="password">Password</label>
+
+        <div class="password-input">
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password..."
+                autocomplete="off">
+
+            <button
+                id="toggle-password"
+                type="button"
+                aria-label="Show password">
+
+                <i class="fa-solid fa-eye"></i>
+
+            </button>
+
+        </div>
+
+        <div class="button-group">
+
+            <button id="analyze-btn">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analyze Password
+
+            </button>
+
+            <button id="generate-btn">
+
+                <i class="fa-solid fa-key"></i>
+
+                Generate Password
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- Results -->
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Strength</h3>
+            <p id="strength-value">--</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Entropy</h3>
+            <p id="entropy-value">-- bits</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Crack Time</h3>
+            <p id="cracktime-value">--</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Breach Status</h3>
+            <p id="breach-value">Unknown</p>
+        </div>
+
+    </section>
+
+    <!-- Analysis -->
+    <section class="analysis-grid">
+
+        <div class="card">
+
+            <h3>Password Requirements</h3>
+
+            <ul id="requirements-list">
+
+                <li>☐ Minimum 12 characters</li>
+                <li>☐ Uppercase letter</li>
+                <li>☐ Lowercase letter</li>
+                <li>☐ Number</li>
+                <li>☐ Special character</li>
+
+            </ul>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Suggestions</h3>
+
+            <div id="suggestions">
+
+                Waiting for analysis...
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- History -->
+
+    <section class="card">
+
+        <h3>Recent Analysis</h3>
+
+        <div id="history-container">
+
+            No analysis yet.
+
+        </div>
+
+    </section>
+
+    <!-- Export -->
+
+    <section class="export-section">
+
+        <button id="export-btn">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            Export PDF Report
+
+        </button>
+
+    </section>
+
+</main>
+
+{% endblock %}

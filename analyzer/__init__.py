@@ -1,0 +1,3 @@
+"""
+Password Strength Analyzer package.
+"""
