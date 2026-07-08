@@ -1,3 +1,18 @@
+"""
+database.py
+
+SQLite database operations for password scan history.
+
+Design notes:
+    - Every analysis is logged as its own row. We intentionally do NOT
+      deduplicate on password_hash — a user re-checking the same password
+      later (e.g. after a breach was patched, or just to confirm) should
+      show up as a new entry with its own timestamp, not vanish silently.
+    - Only the SHA-256 hash of the password is ever stored. Plaintext is
+      never written to disk.
+    - All queries are parameterized to prevent SQL injection.
+"""
+
 import hashlib
 import os
 import sqlite3
@@ -19,7 +34,14 @@ def get_connection() -> sqlite3.Connection:
 
 
 def initialize_database() -> None:
-    """Create the history table if it doesn't already exist."""
+    """
+    Create the history table if it doesn't already exist, and add any
+    columns that are missing from an older version of the table.
+
+    This keeps existing local database files usable across schema
+    changes instead of throwing sqlite3.OperationalError the first time
+    a new column (like score or is_breached) is referenced.
+    """
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -34,6 +56,26 @@ def initialize_database() -> None:
             analyzed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+
+    conn.commit()
+
+    # Migrate older database files that predate the score/is_breached
+    # columns, so an existing local .db doesn't need to be deleted
+    # every time the schema gains a new field.
+    existing_columns = {
+        row["name"] for row in cursor.execute("PRAGMA table_info(password_history)")
+    }
+
+    required_columns = {
+        "score": "INTEGER NOT NULL DEFAULT 0",
+        "is_breached": "INTEGER NOT NULL DEFAULT 0",
+    }
+
+    for column_name, column_definition in required_columns.items():
+        if column_name not in existing_columns:
+            cursor.execute(
+                f"ALTER TABLE password_history ADD COLUMN {column_name} {column_definition}"
+            )
 
     conn.commit()
     conn.close()
