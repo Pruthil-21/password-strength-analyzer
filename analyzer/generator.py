@@ -19,8 +19,8 @@ def generate_password(
     Generate a cryptographically secure password.
     """
 
-    if length < 8:
-        raise ValueError("Password length must be at least 8.")
+    if length < 8 or length > 128:
+        raise ValueError("Password length must be between 8 and 128.")
 
     character_pool = ""
     password = []
