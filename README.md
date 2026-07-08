@@ -41,8 +41,6 @@ Built as a cybersecurity portfolio project to demonstrate secure coding practice
 
 ## Screenshots
 
-## Screenshots
-
 ### Home
 
 ![Home](screenshots/home.png)
