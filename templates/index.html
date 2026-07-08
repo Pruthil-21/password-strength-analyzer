@@ -13,10 +13,10 @@
         </a>
 
         <div class="nav-actions">
-            <button id="history-btn" class="nav-btn">
+            <a href="/history-page" class="nav-btn">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 History
-            </button>
+            </a>
 
             <a href="https://github.com/Pruthil-21/password-strength-analyzer"
                target="_blank"
@@ -30,6 +30,8 @@
 </header>
 
 <main class="container dashboard">
+
+    <p id="error-banner" class="error-banner hidden"></p>
 
     <!-- Analyzer -->
     <section class="card">
@@ -45,6 +47,16 @@
                 id="password"
                 placeholder="Enter your password..."
                 autocomplete="off">
+
+            <button
+                id="copy-btn"
+                type="button"
+                aria-label="Copy password to clipboard"
+                title="Copy to clipboard">
+
+                <i class="fa-solid fa-copy"></i>
+
+            </button>
 
             <button
                 id="toggle-password"
@@ -76,6 +88,41 @@
             </button>
 
         </div>
+
+        <!-- Generator options -->
+        <div class="generator-options">
+
+            <div class="generator-slider">
+                <label for="gen-length">Length: <span id="gen-length-value">16</span></label>
+                <input type="range" id="gen-length" min="8" max="64" value="16"
+                       oninput="document.getElementById('gen-length-value').textContent = this.value">
+            </div>
+
+            <div class="generator-checkboxes">
+
+                <label><input type="checkbox" id="gen-upper" checked> Uppercase</label>
+                <label><input type="checkbox" id="gen-lower" checked> Lowercase</label>
+                <label><input type="checkbox" id="gen-numbers" checked> Numbers</label>
+                <label><input type="checkbox" id="gen-symbols" checked> Symbols</label>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Score -->
+    <section class="card score-panel">
+
+        <h3>Overall Score</h3>
+
+        <div class="score-bar-track">
+            <div id="score-bar-fill" class="score-bar-fill"></div>
+        </div>
+
+        <p class="score-readout">
+            <span id="score-value">0</span><span class="score-max">/100</span>
+        </p>
 
     </section>
 
@@ -125,6 +172,18 @@
 
         <div class="card">
 
+            <h3>Weaknesses</h3>
+
+            <ul id="weaknesses-list">
+
+                <li>Waiting for analysis...</li>
+
+            </ul>
+
+        </div>
+
+        <div class="card">
+
             <h3>Suggestions</h3>
 
             <div id="suggestions">
@@ -143,6 +202,11 @@
 
         <h3>Recent Analysis</h3>
 
+        <button id="history-btn" class="nav-btn">
+            <i class="fa-solid fa-rotate"></i>
+            Load recent history
+        </button>
+
         <div id="history-container">
 
             No analysis yet.
@@ -155,7 +219,7 @@
 
     <section class="export-section">
 
-        <button id="export-btn">
+        <button id="export-btn" disabled>
 
             <i class="fa-solid fa-file-pdf"></i>
 

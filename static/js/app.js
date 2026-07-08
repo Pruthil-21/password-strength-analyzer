@@ -453,4 +453,186 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+    // ==========================================
+    // DEDICATED HISTORY PAGE
+    // (only runs when history.html's elements are present)
+    // ==========================================
+
+    const historyTableBody = document.getElementById("history-table-body");
+    const historySearch = document.getElementById("history-search");
+    const historyRefreshBtn = document.getElementById("history-refresh-btn");
+    const historyClearBtn = document.getElementById("history-clear-btn");
+
+    async function loadHistoryPage() {
+
+        const search = historySearch ? historySearch.value.trim() : "";
+        const url = search ? `/history?search=${encodeURIComponent(search)}` : "/history";
+
+        try {
+
+            const response = await fetch(url);
+            const history = await response.json();
+
+            if (!response.ok) {
+
+                showError(history.error || "Unable to load history.");
+                return;
+
+            }
+
+            renderHistoryTableBody(history);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+            showError("Unable to load history.");
+
+        }
+
+    }
+
+    function renderHistoryTableBody(history) {
+
+        historyTableBody.innerHTML = "";
+
+        if (history.length === 0) {
+
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 7;
+            cell.textContent = "No history entries found.";
+
+            row.appendChild(cell);
+            historyTableBody.appendChild(row);
+
+            return;
+
+        }
+
+        history.forEach(item => {
+
+            const row = document.createElement("tr");
+
+            const values = [
+                item.password_hash.slice(0, 16) + "...",
+                item.strength,
+                `${item.score}/100`,
+                `${item.entropy} bits`,
+                item.is_breached ? "Yes" : "No",
+                item.date,
+            ];
+
+            values.forEach(value => {
+
+                const td = document.createElement("td");
+                td.textContent = value;
+                row.appendChild(td);
+
+            });
+
+            const actionCell = document.createElement("td");
+            const deleteBtn = document.createElement("button");
+
+            deleteBtn.className = "delete-row-btn";
+            deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+            deleteBtn.setAttribute("aria-label", "Delete this entry");
+
+            deleteBtn.addEventListener("click", async () => {
+
+                try {
+
+                    const response = await fetch(`/history/${item.id}`, {
+                        method: "DELETE"
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+
+                        showError(data.error || "Unable to delete entry.");
+                        return;
+
+                    }
+
+                    loadHistoryPage();
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+                    showError("Unable to delete entry.");
+
+                }
+
+            });
+
+            actionCell.appendChild(deleteBtn);
+            row.appendChild(actionCell);
+
+            historyTableBody.appendChild(row);
+
+        });
+
+    }
+
+    if (historyTableBody) {
+
+        loadHistoryPage();
+
+        if (historyRefreshBtn) {
+            historyRefreshBtn.addEventListener("click", loadHistoryPage);
+        }
+
+        if (historySearch) {
+            historySearch.addEventListener("keyup", (event) => {
+                if (event.key === "Enter") {
+                    loadHistoryPage();
+                }
+            });
+        }
+
+        if (historyClearBtn) {
+
+            historyClearBtn.addEventListener("click", async () => {
+
+                if (!confirm("Delete all history? This cannot be undone.")) {
+                    return;
+                }
+
+                try {
+
+                    const response = await fetch("/history", {
+                        method: "DELETE"
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+
+                        showError(data.error || "Unable to clear history.");
+                        return;
+
+                    }
+
+                    loadHistoryPage();
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+                    showError("Unable to clear history.");
+
+                }
+
+            });
+
+        }
+
+    }
+
 });

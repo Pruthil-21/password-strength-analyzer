@@ -26,6 +26,7 @@ class Config:
 
     # API
     HIBP_API_URL = "https://api.pwnedpasswords.com/range/"
+    HIBP_REQUEST_TIMEOUT = 5  # seconds
 
     # App
     MAX_PASSWORD_LENGTH = 256

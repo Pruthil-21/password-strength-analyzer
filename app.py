@@ -59,9 +59,9 @@ def analyze():
             "error": "Password is required."
         }), 400
 
-    if len(password) > 256:
+    if len(password) > app.config.get("MAX_PASSWORD_LENGTH", 256):
         return jsonify({
-            "error": "Password exceeds the maximum supported length (256)."
+            "error": "Password exceeds the maximum supported length."
         }), 400
 
     # Password analysis

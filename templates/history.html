@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}History &mdash; Password Strength Analyzer{% endblock %}
+
+{% block content %}
+
+<header class="navbar">
+    <div class="container">
+
+        <a href="/" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Password Strength Analyzer</span>
+        </a>
+
+        <div class="nav-actions">
+            <a href="/" class="nav-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Analyzer
+            </a>
+        </div>
+
+    </div>
+</header>
+
+<main class="container dashboard">
+
+    <p id="error-banner" class="error-banner hidden"></p>
+
+    <section class="card">
+
+        <h2>Scan History</h2>
+        <p>
+            Passwords are never stored. Each row shows a SHA-256 hash for
+            reference only, plus the metrics from that scan.
+        </p>
+
+        <div class="history-toolbar">
+
+            <input
+                type="text"
+                id="history-search"
+                placeholder="Search by hash prefix...">
+
+            <button id="history-refresh-btn" class="nav-btn">
+                <i class="fa-solid fa-rotate"></i>
+                Refresh
+            </button>
+
+            <button id="history-clear-btn" class="nav-btn nav-btn-danger">
+                <i class="fa-solid fa-trash"></i>
+                Clear all
+            </button>
+
+        </div>
+
+    </section>
+
+    <section class="card">
+
+        <div class="table-wrapper">
+
+            <table class="history-table">
+
+                <thead>
+                    <tr>
+                        <th>Hash (SHA-256)</th>
+                        <th>Strength</th>
+                        <th>Score</th>
+                        <th>Entropy</th>
+                        <th>Breached</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="history-table-body">
+                    <tr><td colspan="7">Loading history...</td></tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}
