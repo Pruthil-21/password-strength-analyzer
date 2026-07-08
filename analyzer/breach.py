@@ -4,7 +4,9 @@ breach.py
 Checks whether a password has appeared in known data breaches
 using the Have I Been Pwned Pwned Passwords API.
 
-Implements the k-Anonymity model.
+Implements the k-Anonymity model: only the first 5 characters of the
+password's SHA-1 hash are ever sent to the API. The full hash — and
+therefore the password — never leaves this machine.
 """
 
 import hashlib
@@ -33,7 +35,8 @@ def check_password_breach(password: str) -> dict:
 
         response = requests.get(
             Config.HIBP_API_URL + prefix,
-            timeout=10
+            headers={"Add-Padding": "true"},
+            timeout=Config.HIBP_REQUEST_TIMEOUT
         )
 
         response.raise_for_status()
