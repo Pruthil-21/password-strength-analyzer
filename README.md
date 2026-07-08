@@ -163,7 +163,6 @@ This is the k-anonymity model HIBP itself recommends for exactly this use case.
 
 ## Future Improvements
 
-- Unit test coverage for `strength.py`, `generator.py`, and `database.py`
 - Rate limiting on `/analyze` and `/generate`
 - Passphrase strength mode (Diceware-style scoring)
 - Export history to CSV
